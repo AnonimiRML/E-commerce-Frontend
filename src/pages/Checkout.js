@@ -1,17 +1,55 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { Container, Grid, Typography, TextField, Button, FormControlLabel, Checkbox, List, ListItem, ListItemText } from '@mui/material';
 
-const Checkout = ({ cart, addToCart, removeFromCart }) => {
+const Checkout = ({ cart }) => {
   const [isShippingCompleted, setIsShippingCompleted] = useState(false);
-  
+  const [guest, setGuest] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+  });
+  const [shippingAddress, setShippingAddress] = useState({
+    addressLine1: '',
+    addressLine2: '',
+    city: '',
+    state: '',
+    zipCode: '',
+    country: '',
+  });
+
+  const handleGuestChange = (e) => {
+    setGuest({ ...guest, [e.target.name]: e.target.value });
+  };
+
+  const handleShippingChange = (e) => {
+    setShippingAddress({ ...shippingAddress, [e.target.name]: e.target.value });
+  };
+
   const handleShippingSubmit = (e) => {
     e.preventDefault();
     setIsShippingCompleted(true);
   };
 
-  const handlePaymentSubmit = (e) => {
+  const handlePaymentSubmit = async (e) => {
     e.preventDefault();
-    alert('Payment Submitted');
+    const order = {
+      guest,
+      shippingAddress,
+      products: cart.map((item) => ({
+        product: item._id,
+        quantity: item.quantity,
+      })),
+    };
+
+    try {
+      await axios.post(`${process.env.REACT_APP_API_URL}/orders`, order);
+      alert('Order submitted successfully');
+    } catch (error) {
+      console.error('Error submitting order:', error);
+      alert('Failed to submit order');
+    }
   };
 
   const calculateTotal = () => {
@@ -31,21 +69,6 @@ const Checkout = ({ cart, addToCart, removeFromCart }) => {
                   primary={`${item.name} x ${item.quantity}`}
                   secondary={`$${(item.price * item.quantity).toFixed(2)}`}
                 />
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => addToCart(item)}
-                  style={{ marginRight: '10px' }}
-                >
-                  +
-                </Button>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={() => removeFromCart(item._id)}
-                >
-                  -
-                </Button>
               </ListItem>
             ))}
             <ListItem>
@@ -110,6 +133,8 @@ const Checkout = ({ cart, addToCart, removeFromCart }) => {
                 autoComplete="given-name"
                 variant="outlined"
                 margin="normal"
+                value={guest.firstName}
+                onChange={handleGuestChange}
               />
               <TextField
                 required
@@ -120,45 +145,55 @@ const Checkout = ({ cart, addToCart, removeFromCart }) => {
                 autoComplete="family-name"
                 variant="outlined"
                 margin="normal"
+                value={guest.lastName}
+                onChange={handleGuestChange}
               />
               <TextField
                 required
-                id="email1"
-                name="email1"
+                id="email"
+                name="email"
                 label="Email"
                 fullWidth
                 autoComplete="email"
                 variant="outlined"
                 margin="normal"
+                value={guest.email}
+                onChange={handleGuestChange}
               />
               <TextField
                 required
-                id="phone1"
-                name="phone1"
-                label="Phone Number"
+                id="phone"
+                name="phone"
+                label="Phone"
                 fullWidth
-                autoComplete="phone-number"
+                autoComplete="tel"
                 variant="outlined"
                 margin="normal"
+                value={guest.phone}
+                onChange={handleGuestChange}
               />
               <TextField
                 required
-                id="address1"
-                name="address1"
+                id="addressLine1"
+                name="addressLine1"
                 label="Address line 1"
                 fullWidth
                 autoComplete="shipping address-line1"
                 variant="outlined"
                 margin="normal"
+                value={shippingAddress.addressLine1}
+                onChange={handleShippingChange}
               />
               <TextField
-                id="address2"
-                name="address2"
+                id="addressLine2"
+                name="addressLine2"
                 label="Address line 2"
                 fullWidth
                 autoComplete="shipping address-line2"
                 variant="outlined"
                 margin="normal"
+                value={shippingAddress.addressLine2}
+                onChange={handleShippingChange}
               />
               <TextField
                 required
@@ -169,6 +204,8 @@ const Checkout = ({ cart, addToCart, removeFromCart }) => {
                 autoComplete="shipping address-level2"
                 variant="outlined"
                 margin="normal"
+                value={shippingAddress.city}
+                onChange={handleShippingChange}
               />
               <TextField
                 required
@@ -179,16 +216,20 @@ const Checkout = ({ cart, addToCart, removeFromCart }) => {
                 autoComplete="shipping address-level1"
                 variant="outlined"
                 margin="normal"
+                value={shippingAddress.state}
+                onChange={handleShippingChange}
               />
               <TextField
                 required
-                id="zip"
-                name="zip"
+                id="zipCode"
+                name="zipCode"
                 label="Zip / Postal code"
                 fullWidth
                 autoComplete="shipping postal-code"
                 variant="outlined"
                 margin="normal"
+                value={shippingAddress.zipCode}
+                onChange={handleShippingChange}
               />
               <TextField
                 required
@@ -199,6 +240,8 @@ const Checkout = ({ cart, addToCart, removeFromCart }) => {
                 autoComplete="shipping country"
                 variant="outlined"
                 margin="normal"
+                value={shippingAddress.country}
+                onChange={handleShippingChange}
               />
               <FormControlLabel
                 control={<Checkbox color="primary" name="saveAddress" value="yes" />}
