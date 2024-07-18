@@ -123,6 +123,26 @@ const Checkout = ({ cart, addToCart, removeFromCart }) => {
               />
               <TextField
                 required
+                id="email1"
+                name="email1"
+                label="Email"
+                fullWidth
+                autoComplete="email"
+                variant="outlined"
+                margin="normal"
+              />
+              <TextField
+                required
+                id="phone1"
+                name="phone1"
+                label="Phone Number"
+                fullWidth
+                autoComplete="phone-number"
+                variant="outlined"
+                margin="normal"
+              />
+              <TextField
+                required
                 id="address1"
                 name="address1"
                 label="Address line 1"
