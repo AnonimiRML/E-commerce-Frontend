@@ -1,70 +1,78 @@
-# Getting Started with Create React App
+# FashionHub
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+FashionHub is an e-commerce platform where users can browse, filter, and purchase products. The project includes features such as category-based browsing, price filtering, and a checkout process.
 
-## Available Scripts
+## Table of Contents
+- [Installation](#installation)
+- [Usage](#usage)
+- [API Endpoints](#api-endpoints)
+- [Environment Variables](#environment-variables)
+- [Features](#features)
+- [Contributing](#contributing)
+- [License](#license)
 
-In the project directory, you can run:
+## Installation
 
-### `npm start`
+To install and run this project locally, follow these steps:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. **Clone the repository**
+    ```bash
+    git clone https://github.com/AnonimiRML/E-commerce-Frontend.git
+    ```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+2. **Navigate to the project directory**
+    ```bash
+    cd fashionhub
+    ```
 
-### `npm test`
+3. **Install the dependencies**
+    ```bash
+    npm install
+    ```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+4. **Create a `.env` file in the root directory with the following variables: You can check out the API server repository for more details: [API Server Repository](https://github.com/AnonimiRML/E-commerce)**
+    ```env
+    REACT_APP_API_URL=http://localhost:5000/api/v1
+    ```
 
-### `npm run build`
+5. **Run the application**
+    ```bash
+    npm start
+    ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Usage
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **Home Page:** The home page displays a banner and a list of categories. Clicking on a category button navigates to the products page with the category filter applied.
+- **Products Page:** Users can filter products by category, minimum price, and maximum price.
+- **Checkout Page:** Users can enter shipping information, review their order, and submit payment details.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## API Endpoints
 
-### `npm run eject`
+The API server is built using Node.js. You can check out the API server repository for more details: [API Server Repository](https://github.com/AnonimiRML/E-commerce)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Environment Variables
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The following environment variables are required to run this project:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- `REACT_APP_API_URL`: The base URL for the API.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Features
 
-## Learn More
+- **Category Filtering:** Filter products by categories.
+- **Price Filtering:** Filter products by price range.
+- **Add to Cart:** Add products to the shopping cart.
+- **Checkout:** Complete the purchase by entering shipping and payment details.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Contributing
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Contributions are welcome! Please fork the repository and submit a pull request for any feature enhancements, bug fixes, or other improvements.
 
-### Code Splitting
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## License
 
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project is licensed under the MIT License.
