@@ -6,6 +6,8 @@ import Products from './pages/Products';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import ProductPage from './pages/ProductPage';
+import AdminDashboard from './pages/AdminDashboard';
+
 
 const App = () => {
   const [cart, setCart] = useState([]);
@@ -45,6 +47,7 @@ const App = () => {
         <Route path="/cart" element={<Cart cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} />} />
         <Route path="/checkout" element={<Checkout cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} />} />
         <Route path="/product/:id" element={<ProductPage cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} />} />
+        <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </Router>
   );
