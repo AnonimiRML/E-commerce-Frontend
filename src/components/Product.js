@@ -3,10 +3,21 @@ import { Card, CardContent, CardMedia, Typography, Button, CardActions, IconButt
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import StarIcon from '@mui/icons-material/Star';
+import { Link } from 'react-router-dom';
+import { styled } from '@mui/material/styles';
+
+const StyledCard = styled(Card)(({ theme }) => ({
+  transition: 'transform 0.2s',
+  '&:hover': {
+    transform: 'scale(1.05)',
+  },
+  textDecoration: 'none',
+  color: 'inherit'
+}));
 
 const Product = ({ product, addToCart }) => {
   return (
-    <Card>
+    <StyledCard component={Link} to={`/product/${product._id}`}>
       <CardMedia
         component="img"
         height="140"
@@ -18,7 +29,7 @@ const Product = ({ product, addToCart }) => {
           <Typography gutterBottom variant="h6" component="div">
             {product.name}
           </Typography>
-          <IconButton aria-label="add to favorites">
+          <IconButton aria-label="add to favorites" onClick={(e) => e.stopPropagation()}>
             <FavoriteIcon />
           </IconButton>
         </div>
@@ -36,12 +47,15 @@ const Product = ({ product, addToCart }) => {
           variant="contained"
           color="primary"
           startIcon={<AddShoppingCartIcon />}
-          onClick={() => addToCart(product)}
+          onClick={(e) => {
+            e.stopPropagation();
+            addToCart(product);
+          }}
         >
           Add to cart
         </Button>
       </CardActions>
-    </Card>
+    </StyledCard>
   );
 };
 
