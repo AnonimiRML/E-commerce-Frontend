@@ -1,7 +1,7 @@
 import React from 'react';
-import { Card, CardContent, CardActions, Typography, Button } from '@mui/material';
+import { Card, CardContent, Typography } from '@mui/material';
 
-const Product = ({ product, addToCart }) => {
+const Product = ({ product }) => {
   return (
     <Card>
       <CardContent>
@@ -9,11 +9,6 @@ const Product = ({ product, addToCart }) => {
         <Typography variant="body2" color="textSecondary">{product.description}</Typography>
         <Typography variant="h6">${product.price}</Typography>
       </CardContent>
-      <CardActions>
-        <Button size="small" color="primary" onClick={() => addToCart(product)}>
-          Add to Cart
-        </Button>
-      </CardActions>
     </Card>
   );
 };
