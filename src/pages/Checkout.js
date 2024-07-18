@@ -1,7 +1,19 @@
-import React from 'react';
-import { Container, Grid, Typography, Button, List, ListItem, ListItemText, TextField, Checkbox, FormControlLabel } from '@mui/material';
+import React, { useState } from 'react';
+import { Container, Grid, Typography, TextField, Button, FormControlLabel, Checkbox, List, ListItem, ListItemText } from '@mui/material';
 
 const Checkout = ({ cart, addToCart, removeFromCart }) => {
+  const [isShippingCompleted, setIsShippingCompleted] = useState(false);
+  
+  const handleShippingSubmit = (e) => {
+    e.preventDefault();
+    setIsShippingCompleted(true);
+  };
+
+  const handlePaymentSubmit = (e) => {
+    e.preventDefault();
+    alert('Payment Submitted');
+  };
+
   const calculateTotal = () => {
     return cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
   };
@@ -44,95 +56,139 @@ const Checkout = ({ cart, addToCart, removeFromCart }) => {
 
         {/* Shipping Address Form */}
         <Grid item xs={12} md={6}>
-          <Typography variant="h4" gutterBottom>Shipping address</Typography>
-          <form>
-            <TextField
-              required
-              id="firstName"
-              name="firstName"
-              label="First name"
-              fullWidth
-              autoComplete="given-name"
-              variant="outlined"
-              margin="normal"
-            />
-            <TextField
-              required
-              id="lastName"
-              name="lastName"
-              label="Last name"
-              fullWidth
-              autoComplete="family-name"
-              variant="outlined"
-              margin="normal"
-            />
-            <TextField
-              required
-              id="address1"
-              name="address1"
-              label="Address line 1"
-              fullWidth
-              autoComplete="shipping address-line1"
-              variant="outlined"
-              margin="normal"
-            />
-            <TextField
-              id="address2"
-              name="address2"
-              label="Address line 2"
-              fullWidth
-              autoComplete="shipping address-line2"
-              variant="outlined"
-              margin="normal"
-            />
-            <TextField
-              required
-              id="city"
-              name="city"
-              label="City"
-              fullWidth
-              autoComplete="shipping address-level2"
-              variant="outlined"
-              margin="normal"
-            />
-            <TextField
-              required
-              id="state"
-              name="state"
-              label="State"
-              fullWidth
-              autoComplete="shipping address-level1"
-              variant="outlined"
-              margin="normal"
-            />
-            <TextField
-              required
-              id="zip"
-              name="zip"
-              label="Zip / Postal code"
-              fullWidth
-              autoComplete="shipping postal-code"
-              variant="outlined"
-              margin="normal"
-            />
-            <TextField
-              required
-              id="country"
-              name="country"
-              label="Country"
-              fullWidth
-              autoComplete="shipping country"
-              variant="outlined"
-              margin="normal"
-            />
-            <FormControlLabel
-              control={<Checkbox color="primary" name="saveAddress" value="yes" />}
-              label="Use this address for payment details"
-            />
-          </form>
-          <Button variant="contained" color="primary" style={{ marginTop: '20px' }}>
-            Next
-          </Button>
+          <Typography variant="h4" gutterBottom>{isShippingCompleted ? 'Payment details' : 'Shipping address'}</Typography>
+          {isShippingCompleted ? (
+            <form onSubmit={handlePaymentSubmit}>
+              <TextField
+                required
+                id="cardName"
+                name="cardName"
+                label="Name on card"
+                fullWidth
+                variant="outlined"
+                margin="normal"
+              />
+              <TextField
+                required
+                id="cardNumber"
+                name="cardNumber"
+                label="Card number"
+                fullWidth
+                variant="outlined"
+                margin="normal"
+              />
+              <TextField
+                required
+                id="expDate"
+                name="expDate"
+                label="Expiry date"
+                fullWidth
+                variant="outlined"
+                margin="normal"
+              />
+              <TextField
+                required
+                id="cvv"
+                name="cvv"
+                label="CVV"
+                fullWidth
+                variant="outlined"
+                margin="normal"
+              />
+              <Button variant="contained" color="primary" type="submit" style={{ marginTop: '20px' }}>
+                Submit Payment
+              </Button>
+            </form>
+          ) : (
+            <form onSubmit={handleShippingSubmit}>
+              <TextField
+                required
+                id="firstName"
+                name="firstName"
+                label="First name"
+                fullWidth
+                autoComplete="given-name"
+                variant="outlined"
+                margin="normal"
+              />
+              <TextField
+                required
+                id="lastName"
+                name="lastName"
+                label="Last name"
+                fullWidth
+                autoComplete="family-name"
+                variant="outlined"
+                margin="normal"
+              />
+              <TextField
+                required
+                id="address1"
+                name="address1"
+                label="Address line 1"
+                fullWidth
+                autoComplete="shipping address-line1"
+                variant="outlined"
+                margin="normal"
+              />
+              <TextField
+                id="address2"
+                name="address2"
+                label="Address line 2"
+                fullWidth
+                autoComplete="shipping address-line2"
+                variant="outlined"
+                margin="normal"
+              />
+              <TextField
+                required
+                id="city"
+                name="city"
+                label="City"
+                fullWidth
+                autoComplete="shipping address-level2"
+                variant="outlined"
+                margin="normal"
+              />
+              <TextField
+                required
+                id="state"
+                name="state"
+                label="State"
+                fullWidth
+                autoComplete="shipping address-level1"
+                variant="outlined"
+                margin="normal"
+              />
+              <TextField
+                required
+                id="zip"
+                name="zip"
+                label="Zip / Postal code"
+                fullWidth
+                autoComplete="shipping postal-code"
+                variant="outlined"
+                margin="normal"
+              />
+              <TextField
+                required
+                id="country"
+                name="country"
+                label="Country"
+                fullWidth
+                autoComplete="shipping country"
+                variant="outlined"
+                margin="normal"
+              />
+              <FormControlLabel
+                control={<Checkbox color="primary" name="saveAddress" value="yes" />}
+                label="Use this address for payment details"
+              />
+              <Button variant="contained" color="primary" type="submit" style={{ marginTop: '20px' }}>
+                Next
+              </Button>
+            </form>
+          )}
         </Grid>
       </Grid>
     </Container>
