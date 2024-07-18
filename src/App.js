@@ -7,6 +7,9 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import ProductPage from './pages/ProductPage';
 import AdminDashboard from './pages/AdminDashboard';
+import Login from './pages/Login';
+import { AuthProvider } from './context/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 
 
 const App = () => {
@@ -39,17 +42,20 @@ const App = () => {
   };
 
   return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/products" element={<Products addToCart={addToCart} />} />
-        <Route path="/cart" element={<Cart cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} />} />
-        <Route path="/checkout" element={<Checkout cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} />} />
-        <Route path="/product/:id" element={<ProductPage cart={cart} addToCart={addToCart} removeFromCart={removeFromCart} />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/product/:id" element={<ProductPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/admin" element={<ProtectedRoute element={AdminDashboard} />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 };
 
