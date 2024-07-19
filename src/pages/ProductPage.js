@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Container, Typography, CircularProgress, Button } from '@mui/material';
+import { useCart } from '../context/CartContext';
 
-const ProductPage = ({ cart, addToCart, removeFromCart }) => {
+const ProductPage = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { cartItems, addToCart, removeFromCart, getCartQuantity } = useCart();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -23,11 +25,6 @@ const ProductPage = ({ cart, addToCart, removeFromCart }) => {
     fetchProduct();
   }, [id]);
 
-  const getCartQuantity = () => {
-    const cartItem = cart.find((item) => item._id === id);
-    return cartItem ? cartItem.quantity : 0;
-  };
-
   if (loading) {
     return <CircularProgress />;
   }
@@ -36,30 +33,23 @@ const ProductPage = ({ cart, addToCart, removeFromCart }) => {
     return <Typography variant="h6">Product not found</Typography>;
   }
 
+  const quantityInCart = getCartQuantity(product.id);
+
   return (
     <Container maxWidth="md" style={{ marginTop: '20px' }}>
       <Typography variant="h4" gutterBottom>{product.name}</Typography>
       <Typography variant="body1" gutterBottom>{product.description}</Typography>
       <Typography variant="h6">${product.price}</Typography>
       <Typography variant="body2" color="textSecondary">In Stock: {product.stock}</Typography>
-      <Typography variant="body2" color="textSecondary">In Cart: {getCartQuantity()}</Typography>
-      <Button
-        variant="contained"
-        color="primary"
-        style={{ marginTop: '20px', marginRight: '10px' }}
-        onClick={() => addToCart(product)}
-      >
-        +
+      <Typography variant="body2" color="textSecondary">Quantity in Cart: {quantityInCart}</Typography>
+      <Button variant="contained" color="primary" onClick={() => addToCart({ ...product, quantity: 1 })}>
+        Add to Cart
       </Button>
-      <Button
-        variant="contained"
-        color="secondary"
-        style={{ marginTop: '20px' }}
-        onClick={() => removeFromCart(product._id)}
-        disabled={getCartQuantity() === 0}
-      >
-        -
-      </Button>
+      {quantityInCart > 0 && (
+        <Button variant="contained" color="secondary" onClick={() => removeFromCart(product.id)}>
+          Remove from Cart
+        </Button>
+      )}
     </Container>
   );
 };
