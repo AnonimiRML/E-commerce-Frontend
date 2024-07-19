@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Paper, Typography, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { Container, Paper, Typography, CircularProgress, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 
@@ -7,11 +7,13 @@ const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [statusDialogOpen, setStatusDialogOpen] = useState(false);
+  const [newStatus, setNewStatus] = useState('');
   const { token } = useAuth();
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/orders`, {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/orders/all`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -33,6 +35,48 @@ const Orders = () => {
   };
 
   const handleCloseDialog = () => {
+    setSelectedOrder(null);
+  };
+
+  const handleDeleteOrder = async (orderId) => {
+    try {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/orders/${orderId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+      setOrders(orders.filter(order => order._id !== orderId));
+    } catch (error) {
+      console.error('Error deleting order:', error);
+    }
+  };
+
+  const handleChangeStatusClick = (order) => {
+    setSelectedOrder(order);
+    setNewStatus(order.status);
+    setStatusDialogOpen(true);
+  };
+
+  const handleStatusChange = async () => {
+    try {
+      const response = await axios.put(`${process.env.REACT_APP_API_URL}/orders/status`, 
+        { orderId: selectedOrder._id, status: newStatus }, 
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        }
+      );
+      setOrders(orders.map(order => order._id === selectedOrder._id ? { ...order, status: newStatus } : order));
+      setStatusDialogOpen(false);
+      setSelectedOrder(null);
+    } catch (error) {
+      console.error('Error updating order status:', error);
+    }
+  };
+
+  const handleStatusDialogClose = () => {
+    setStatusDialogOpen(false);
     setSelectedOrder(null);
   };
 
@@ -73,6 +117,12 @@ const Orders = () => {
                       <Button variant="outlined" color="primary" onClick={() => handleViewDetails(order)}>
                         View Details
                       </Button>
+                      <Button variant="outlined" color="secondary" onClick={() => handleChangeStatusClick(order)} style={{ marginLeft: '8px' }}>
+                        Change Status
+                      </Button>
+                      <Button variant="outlined" color="error" onClick={() => handleDeleteOrder(order._id)} style={{ marginLeft: '8px' }}>
+                        Delete
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -111,6 +161,31 @@ const Orders = () => {
           </DialogActions>
         </Dialog>
       )}
+
+      <Dialog open={statusDialogOpen} onClose={handleStatusDialogClose}>
+        <DialogTitle>Change Order Status</DialogTitle>
+        <DialogContent>
+          <FormControl fullWidth>
+            <InputLabel>Status</InputLabel>
+            <Select
+              value={newStatus}
+              onChange={(e) => setNewStatus(e.target.value)}
+            >
+              <MenuItem value="Pending">Pending</MenuItem>
+              <MenuItem value="Completed">Completed</MenuItem>
+              <MenuItem value="Cancelled">Cancelled</MenuItem>
+            </Select>
+          </FormControl>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleStatusDialogClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleStatusChange} color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };

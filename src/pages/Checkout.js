@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Container, Grid, Typography, TextField, Button, FormControlLabel, Checkbox, List, ListItem, ListItemText } from '@mui/material';
+import { useCart } from '../context/CartContext';
 
-const Checkout = ({ cart }) => {
+const Checkout = () => {
+  const { cartItems } = useCart();
   const [isShippingCompleted, setIsShippingCompleted] = useState(false);
   const [guest, setGuest] = useState({
     firstName: '',
@@ -37,7 +39,7 @@ const Checkout = ({ cart }) => {
     const order = {
       guest,
       shippingAddress,
-      products: cart.map((item) => ({
+      products: cartItems.map((item) => ({
         product: item._id,
         quantity: item.quantity,
       })),
@@ -53,7 +55,7 @@ const Checkout = ({ cart }) => {
   };
 
   const calculateTotal = () => {
-    return cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
+    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
   };
 
   return (
@@ -63,7 +65,7 @@ const Checkout = ({ cart }) => {
         <Grid item xs={12} md={6}>
           <Typography variant="h4" gutterBottom>Summary</Typography>
           <List>
-            {cart.map((item, index) => (
+            {cartItems.map((item, index) => (
               <ListItem key={index}>
                 <ListItemText
                   primary={`${item.name} x ${item.quantity}`}

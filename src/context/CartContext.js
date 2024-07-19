@@ -4,8 +4,14 @@ const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(() => {
-    const savedCart = localStorage.getItem('cartItems');
-    return savedCart ? JSON.parse(savedCart) : [];
+    try {
+      const savedCart = localStorage.getItem('cartItems');
+      return savedCart ? JSON.parse(savedCart) : [];
+    } catch (error) {
+      console.error('Error parsing cart items from localStorage:', error);
+      localStorage.removeItem('cartItems');
+      return [];
+    }
   });
 
   useEffect(() => {
@@ -13,11 +19,19 @@ export const CartProvider = ({ children }) => {
   }, [cartItems]);
 
   const addToCart = (item) => {
-    setCartItems((prevItems) => [...prevItems, item]);
+    setCartItems((prevItems) => {
+      const itemIndex = prevItems.findIndex((i) => i._id === item._id);
+      if (itemIndex >= 0) {
+        const updatedItems = [...prevItems];
+        updatedItems[itemIndex].quantity += item.quantity;
+        return updatedItems;
+      }
+      return [...prevItems, item];
+    });
   };
 
   const removeFromCart = (itemId) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+    setCartItems((prevItems) => prevItems.filter((item) => item._id !== itemId));
   };
 
   const clearCart = () => {
@@ -25,7 +39,7 @@ export const CartProvider = ({ children }) => {
   };
 
   const getCartQuantity = (itemId) => {
-    const item = cartItems.find((item) => item.id === itemId);
+    const item = cartItems.find((item) => item._id === itemId);
     return item ? item.quantity : 0;
   };
 
